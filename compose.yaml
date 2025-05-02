@@ -26,6 +26,16 @@ services:
     ports:
       - "3000:80"
     depends_on:
+      - api
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: slack-sentiment-api
+    ports:
+      - "8000:8000"
+    depends_on:
       db:
         condition: service_healthy
 
