@@ -44,6 +44,9 @@ services:
       context: ./sentiment_analysis
       dockerfile: Dockerfile
     container_name: slack-sentiment-analysis
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
