@@ -1,7 +1,7 @@
-.PHONY: run stop
+.PHONY: up down
 
-run:
+up:
 	docker compose up -d
 
-stop:
+down:
 	docker compose down
