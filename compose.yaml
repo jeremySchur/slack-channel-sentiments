@@ -38,6 +38,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  
+  sentiment_analysis:
+    build:
+      context: ./sentiment_analysis
+      dockerfile: Dockerfile
+    container_name: slack-sentiment-analysis
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db:
