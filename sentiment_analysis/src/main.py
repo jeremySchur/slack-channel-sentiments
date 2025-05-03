@@ -1,5 +1,5 @@
 from .slack_utils import update_public_channels, get_new_messages
-from .postgres import get_channels, update_timestamps, update_avg_sentiments
+from .postgres import get_channels, update_timestamps, update_avg_sentiments, add_new_messages
 from .analysis import analyze_sentiments
 from time import sleep
 import asyncio
@@ -19,8 +19,9 @@ def job():
     update_timestamps(channels)
 
     analyze_sentiments(channels)
-
     update_avg_sentiments(channels)
+
+    add_new_messages(channels)
 
 if __name__ == "__main__":
     """

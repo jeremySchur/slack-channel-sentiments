@@ -17,7 +17,7 @@ def get_channels():
     channels = {}
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT id, name, last_read FROM channel;")
+            cur.execute("SELECT id, name, last_read FROM channels;")
             for entry in cur:
                 channels[entry[0]] = {"name": entry[1], "last_read_timestamp": entry[2]}
     return channels
@@ -31,7 +31,7 @@ def insert_channel(channel_id, channel_name):
     """
     with psycopg.connect(**DB_PARAMS) as conn:
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO channel (id, name) VALUES (%s, %s);", (channel_id, channel_name))
+            cur.execute("INSERT INTO channels (id, name) VALUES (%s, %s);", (channel_id, channel_name))
         conn.commit()
 
 def update_timestamps(channels):
@@ -46,7 +46,7 @@ def update_timestamps(channels):
         with conn.cursor() as cur:
             for channel_id, channel in channels.items():
                 if channel.get("last_read_timestamp"):
-                    cur.execute("UPDATE channel SET last_read=%s WHERE id=%s;", (channel.get("last_read_timestamp"), channel_id))
+                    cur.execute("UPDATE channels SET last_read=%s WHERE id=%s;", (channel.get("last_read_timestamp"), channel_id))
         conn.commit()
 
 def update_avg_sentiments(channels):
@@ -67,7 +67,7 @@ def update_avg_sentiments(channels):
 
                 new_avg = sum(sentiments) / len(sentiments)
 
-                cur.execute("SELECT avg_sentiment FROM channel WHERE id = %s;", (channel_id,))
+                cur.execute("SELECT avg_sentiment FROM channels WHERE id = %s;", (channel_id,))
                 result = cur.fetchone()
 
                 if result and result[0] is not None:
@@ -77,7 +77,33 @@ def update_avg_sentiments(channels):
                     combined_avg = new_avg
 
                 cur.execute(
-                    "UPDATE channel SET avg_sentiment = %s WHERE id = %s;",
+                    "UPDATE channels SET avg_sentiment = %s WHERE id = %s;",
                     (combined_avg, channel_id)
                 )
+        conn.commit()
+
+def add_new_messages(channels):
+    """
+        Add new messages to the database for each channel.
+        :param channels: Dictionary of channels with messages
+        :return: None
+    """
+    with psycopg.connect(**DB_PARAMS) as conn:
+        with conn.cursor() as cur:
+            for channel_id, channel in channels.items():
+                for message in channel.get("messages", []):
+                    cur.execute(
+                        """
+                        INSERT INTO messages (user_id, channel_id, text, sentiment, created_at) 
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON CONFLICT (user_id, channel_id, created_at) DO NOTHING;
+                        """,
+                        (
+                            message["user_id"],
+                            channel_id,
+                            message["text"],
+                            message.get("sentiment"),
+                            message["ts"],
+                        )
+                    )
         conn.commit()
