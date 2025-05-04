@@ -7,7 +7,7 @@ import Graph from "./Components/Graph";
 import BackToTop from "./Components/BackToTop";
 
 const App = () => {
-  const [selectedChannel, setSelectedChannel] = useState(0);
+  const [selectedChannel, setSelectedChannel] = useState(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -31,9 +31,9 @@ const App = () => {
       <Background className="p-4">
         <Header />
         <Layout>
-          <Channels selectedChannel={selectedChannel} setSelectedChannel={(index) => setSelectedChannel(index)}/>
+          <Channels selectedChannel={selectedChannel} setSelectedChannel={(channel_name) => setSelectedChannel(channel_name)}/>
           {showBackToTop && <BackToTop />}
-          <Graph />
+          <Graph selectedChannel={selectedChannel}/>
         </Layout>
       </Background>
     </main>

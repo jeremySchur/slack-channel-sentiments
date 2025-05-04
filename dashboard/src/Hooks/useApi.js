@@ -6,8 +6,8 @@ const useApi = () => {
         return response.data;
     };
 
-    const getMessages = async (channel) => {
-        const response = await axios.get('/getMessageData', { params: { channel } });
+    const getMessages = async (channel_name) => {
+        const response = await axios.get('/getMessageData', { params: { channel_name } });
         return response.data;
     };
 

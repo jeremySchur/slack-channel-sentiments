@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #072635;
-    --color-highlight: #D8FCF7;
+  --color-primary: #072635;
+  --color-highlight: #D8FCF7;
+  --color-accent: #F5F7F8;
 }
 
 @layer utilities {
-    .scroll-container::-webkit-scrollbar {
-      width: 6px;
-    }
-  
-    .scroll-container::-webkit-scrollbar-track {
-      background: #E3E4E6; 
-      border-radius: 3px;
-    }
-  
-    .scroll-container::-webkit-scrollbar-thumb {
-      background: #072635; 
-      border-radius: 3px;
-      max-height: 10px;
-    }
+  .scroll-container::-webkit-scrollbar {
+    width: 6px;
   }
+
+  .scroll-container::-webkit-scrollbar-track {
+    background: #E3E4E6; 
+    border-radius: 3px;
+  }
+
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: #072635; 
+    border-radius: 3px;
+    max-height: 10px;
+  }
+}

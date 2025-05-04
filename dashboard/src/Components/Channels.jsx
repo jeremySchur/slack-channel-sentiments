@@ -24,8 +24,8 @@ const Channels = ({selectedChannel, setSelectedChannel}) => {
         fetchChannels();
     }, []);
 
-    const handleClick = (index) => {
-        setSelectedChannel(index);
+    const handleClick = (channel_name) => {
+        setSelectedChannel(channel_name);
         if (window.innerWidth < 1280) {
             document.getElementById("back_to_top").scrollIntoView({ behavior: "smooth", block: "start" });
         }
@@ -49,8 +49,8 @@ const Channels = ({selectedChannel, setSelectedChannel}) => {
         return (
             <button
                 key={index}
-                className={`w-full flex justify-between items-center p-4 border-b border-gray-200 ${selectedChannel === index ? 'bg-highlight' : 'cursor-pointer'}`}
-                onClick={() => handleClick(index)}
+                className={`w-full flex justify-between items-center p-4 border-b border-gray-200 ${selectedChannel === channel.name ? 'bg-highlight' : 'cursor-pointer'}`}
+                onClick={() => handleClick(channel.name)}
             >
                 <p>{channel.name}</p>
                 <p>{channel.avg_sentiment ? channel.avg_sentiment : "No data"}</p>
