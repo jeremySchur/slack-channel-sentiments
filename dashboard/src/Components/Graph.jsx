@@ -3,6 +3,7 @@ import useApi from '../Hooks/useApi';
 import {
     ScatterChart,
     Scatter,
+    ReferenceLine,
     XAxis,
     YAxis,
     Tooltip,
@@ -68,27 +69,34 @@ const Graph = ({ selectedChannel }) => {
                 <div className='w-full h-full'>
                     <h1 className="text-xl font-semibold mb-4">{selectedChannel}</h1>
                     <ResponsiveContainer width="100%" height={400}>
-                        <ScatterChart>
-                            <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                            <XAxis
-                                dataKey="date"
-                                scale="time"
-                                type="number"
-                                domain={['auto', 'auto']}
-                                tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: '2-digit'})}
-                            />
-                            <YAxis 
-                                dataKey="sentiment"
-                                type="number"
-                                domain={[-1, 1]} 
-                            />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Scatter
-                                name="Sentiment"
-                                data={messageData.map(msg => ({ date: msg.date.getTime(), sentiment: msg.sentiment }))}
-                                fill="#4f46e5"
-                            />
-                        </ScatterChart>
+                    <ScatterChart>
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                        <XAxis
+                            dataKey="date"
+                            scale="time"
+                            type="number"
+                            domain={['auto', 'auto']}
+                            tickFormatter={(date) =>
+                                new Date(date).toLocaleDateString('en-US', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: '2-digit',
+                                })
+                            }
+                        />
+                        <YAxis dataKey="sentiment" type="number" domain={[-1, 1]} />
+                        <Tooltip content={<CustomTooltip />} />
+                        <ReferenceLine y={0.33} stroke="green" strokeDasharray="3 3" />
+                        <ReferenceLine y={-0.33} stroke="red" strokeDasharray="3 3" />
+                        <Scatter
+                            name="Sentiment"
+                            data={messageData.map((msg) => ({
+                                date: msg.date.getTime(),
+                                sentiment: msg.sentiment,
+                            }))}
+                            fill="#4f46e5"
+                        />
+                    </ScatterChart>
                     </ResponsiveContainer>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
